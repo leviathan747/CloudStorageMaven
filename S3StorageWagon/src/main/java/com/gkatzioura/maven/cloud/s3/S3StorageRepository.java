@@ -35,6 +35,7 @@ import org.apache.maven.wagon.authentication.AuthenticationInfo;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -123,7 +124,7 @@ public class S3StorageRepository {
 
         try {
             try(InputStream inputStream = new TransferProgressFileInputStream(file,transferProgress)) {
-                PutObjectRequest putObjectRequest = new PutObjectRequest(bucket,key,inputStream,new ObjectMetadata());
+                PutObjectRequest putObjectRequest = new PutObjectRequest(bucket,key,inputStream,new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead);
                 amazonS3.putObject(putObjectRequest);
             }
         } catch (AmazonS3Exception | IOException e) {
